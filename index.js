@@ -1,20 +1,25 @@
 const instructions = []
 const vars = {}
 
+function resolveValue(nameOrValue) {
+  if (typeof nameOrValue === 'number') return nameOrValue
+  return vars[nameOrValue] // it can be undefined and fuck up the runtime, fix it later
+}
+
 function $var([name, value]) {
-  vars[name] = value
+  vars[name] = resolveValue(value)
 }
-function $add([name, amount]) {
-  vars[name] += amount
+function $add([name, value]) {
+  vars[name] += resolveValue(value)
 }
-function $subtract([name, amount]) {
-  vars[name] -= amount
+function $subtract([name, value]) {
+  vars[name] -= resolveValue(value)
 }
-function $divide([name, amount]) {
-  vars[name] /= amount
+function $divide([name, value]) {
+  vars[name] /= resolveValue(value)
 }
-function $multiply([name, amount]) {
-  vars[name] *= amount
+function $multiply([name, value]) {
+  vars[name] *= resolveValue(value)
 }
 
 const supported = {
@@ -53,5 +58,11 @@ add("$add", ["test", 10])
 add("$div", ["test", 2])
 add("$mul", ["test", 2])
 add("$sub", ["test", 5])
+
+add("$var", ["test1", "test"])
+add("$add", ["test1", "test"])
+add("$div", ["test1", "test"])
+add("$mul", ["test1", "test"])
+add("$sub", ["test1", "test"])
 run()
 console.log(vars)
