@@ -4,13 +4,25 @@ const vars = {}
 function $var([name, value]) {
   vars[name] = value
 }
-function $sum([name, amount]) {
+function $add([name, amount]) {
   vars[name] += amount
+}
+function $subtract([name, amount]) {
+  vars[name] -= amount
+}
+function $divide([name, amount]) {
+  vars[name] /= amount
+}
+function $multiply([name, amount]) {
+  vars[name] *= amount
 }
 
 const supported = {
   '$var': $var,
-  '$sum': $sum,
+  '$add': $add,
+  '$sub': $subtract,
+  '$div': $divide,
+  '$mul': $multiply,
 }
 
 function getInstructionFunctionOrDie(instruction) {
@@ -37,6 +49,9 @@ function add(instruction, params) {
 }
 
 add("$var", ["test", 0])
-add("$sum", ["test", 1])
+add("$add", ["test", 10])
+add("$div", ["test", 2])
+add("$mul", ["test", 2])
+add("$sub", ["test", 5])
 run()
 console.log(vars)
